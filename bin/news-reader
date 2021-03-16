@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require_all '../lib'
+
+NewsReader::CLI.new.call
