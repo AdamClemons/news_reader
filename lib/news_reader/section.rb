@@ -15,7 +15,7 @@ class NewsReader::Section
     end
 
     def add_article(article)
-        raise "invalid article" if !article.is_a?(Article)
+        raise "invalid article" if !article.is_a?(NewsReader::Article)
         @articles << article
     end
 
@@ -27,12 +27,12 @@ class NewsReader::Section
     def self.fetch_sections
         if self.all.empty?
             home_url = "https://news.yahoo.com/"
-            sections = Scraper.scrape_sections(home_url)
+            sections = NewsReader::Scraper.scrape_sections(home_url)
         end
     end
 
     def fetch_articles
-        Scraper.scrape_section_page(self) if articles.empty? 
+        NewsReader::Scraper.scrape_section_page(self) if articles.empty? 
     end
 
 end

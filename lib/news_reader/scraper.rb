@@ -1,6 +1,4 @@
-require_relative '../config/environment.rb'
-
-class Scraper
+class NewsReader::Scraper
 
     def self.scrape_sections(home_url)
         html = open(home_url)
