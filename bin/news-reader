@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require_all '../lib'
+require_relative '../config/environment.rb'
 
 NewsReader::CLI.new.call
