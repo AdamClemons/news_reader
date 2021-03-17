@@ -28,31 +28,39 @@ class NewsReader::Scraper
 
     # Method where article is updated within Scraper class
     def self.scrape_article(article)
-        html = open(article.url)
-        page = Nokogiri::HTML(html)
-
-        author = page.css('div.caas-attr-meta').text # author, date, length
-        date_and_mins = page.css('div.caas-attr-time-style').text # date, length
-
-        author.slice!(date_and_mins) # removes date, length to leave only author
-
-        if page.css('img.caas-img').attr('alt')
-            source = page.css('img.caas-img').attr('alt').value
+        # binding.pry
+        begin
+            html = open(article.url)
+            page = Nokogiri::HTML(html)
+        rescue OpenURI::HTTPError
+            article.body = "404 Error.  Please choose another article."
         else
-            source = page.css('div.caas-logo a').text
-        end
+            html = open(article.url)
+            page = Nokogiri::HTML(html)
 
-        article_hash = {
-            :title => page.css('h1').text,
-            :source => source,
-            :author => author,
-            :date => page.css('div.caas-attr-time-style time').text,
-            :mins => page.css('div.caas-attr-time-style span').text,
-            :body => fetch_body(page)
-        }
+            author = page.css('div.caas-attr-meta').text # author, date, length
+            date_and_mins = page.css('div.caas-attr-time-style').text # date, length
 
-        article_hash.each {|key, value| article.send("#{key}=", value)}
-        
+            author.slice!(date_and_mins) # removes date, length to leave only author
+
+            if page.css('img.caas-img').attr('alt')
+                source = page.css('img.caas-img').attr('alt').value
+            else
+                source = page.css('div.caas-logo a').text
+            end
+
+            article_hash = {
+                :title => page.css('h1').text,
+                :source => source,
+                :author => author,
+                :date => page.css('div.caas-attr-time-style time').text,
+                :mins => page.css('div.caas-attr-time-style span').text,
+                :body => fetch_body(page),
+                :downloaded => true
+            }
+
+            article_hash.each {|key, value| article.send("#{key}=", value)}
+        end       
     end
 
     def self.fetch_body(page)
