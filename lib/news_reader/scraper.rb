@@ -1,9 +1,17 @@
 class NewsReader::Scraper
 
+    ARTICLES_PER_SECTION = 10 # Number of articles per section to download
+
     def self.scrape_sections(home_url)
         html = open(home_url)
         page = Nokogiri::HTML(html)
     
+        # The drop(2).first(5) is due to selecting the sections we want.
+        # The first 2 sections are the homepage and a special COVID page
+        # Both use non-standard formatting for their article placement, so
+        # are skipped.  After the 7th section, there is non-text content
+        # a Podcasts section and then Video sections, so the scraper
+        # specifically targets sections 3-7.
         page.css('a.nr-applet-nav-item').drop(2).first(5).each do |area|
             section = {
                 :name => area.text,
@@ -17,7 +25,7 @@ class NewsReader::Scraper
         html = open(section.url)
         page = Nokogiri::HTML(html)
         
-        page.css('h3').first(10).each do |news|
+        page.css('h3').first(ARTICLES_PER_SECTION).each do |news|
             story = {
                 :title => news.text,
                 :url => combine_url(section.url, news.css('a').attr('href').value)
