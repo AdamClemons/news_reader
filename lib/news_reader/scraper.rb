@@ -65,19 +65,12 @@ class NewsReader::Scraper
 
     def self.fetch_body(page)
         article = ""
+        links = []
 
         page.css('div.caas-body p').each do |p|
-            # if p.text[/ Select Competitors (.+) - /]
-            #     last = p.text
-            #     last.slice!(/  Select Competitors (.+) - /)
-            #     article.concat(last)
-            #     break
-            # end
-
             article.concat(p.text, "\n\n")
         end
         article
-
     end
 
     def self.combine_url(parent, child)

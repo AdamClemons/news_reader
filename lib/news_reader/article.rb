@@ -1,5 +1,6 @@
 class NewsReader::Article
-    attr_accessor :url, :title, :source, :author, :date, :mins, :body, :section, :downloaded
+    attr_accessor :url, :title, :source, :author, :date, :mins, :body, :section, 
+    :downloaded
 
     @@downloaded = []
 
