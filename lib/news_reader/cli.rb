@@ -108,6 +108,11 @@ class NewsReader::CLI
         input
     end
 
+
+
+
+# Offline Viewing Mode Methods
+
     def offline_viewing_mode
         puts "\n-------------------------------------------------------------------------------"
         puts "Offline Viewing Mode - Main Menu\n\n"
@@ -136,18 +141,23 @@ class NewsReader::CLI
 
     def view_articles_downloaded
         puts "\n-------------------------------------------------------------------------------"
-        puts "Offline Viewing Mode - Downloaded Articles\n"
-        counter = 0
+        puts "Offline Viewing Mode - Downloaded Articles"
+        puts "Articles not in ascending order\n"
         NewsReader::Section.all.each do |section|
-            puts "---------------------------------\n\n"
-            puts section.name
-            puts "\n"
-            section.articles.each do |article|
-                # binding.pry
-                counter += 1
-                puts "#{counter}. #{article.title}" if article.downloaded == true
+            if(section.articles.detect {|article| article.downloaded == true})
+                puts "---------------------------------\n\n"
+                puts section.name
+                puts "\n"
+                section.articles.each do |article|
+                    # binding.pry
+                    if article.downloaded == true
+                        puts "#{NewsReader::Article.downloaded.index(article) + 1}. #{article.title}"
+                    end
+
+                end
             end
         end
+        puts "---------------------------------\n\n"
         offline_menu(NewsReader::Article.downloaded.length) do |input|
             read_offline_article(NewsReader::Article.downloaded[input - 1])
         end

@@ -3,14 +3,24 @@ class NewsReader::Article
     :downloaded
 
     @@downloaded = []
+    @@all = []
 
     def initialize(section, title_url_hash)
         @section = section
         @title = title_url_hash[:title]
         @url = title_url_hash[:url]
         @downloaded = false 
-
+        
+        @@all << self
         section.add_article(self)
+    end
+
+    def self.all
+        @@all        
+    end
+
+    def self.all=(sorted)
+        @@all = sorted        
     end
 
     def self.downloaded

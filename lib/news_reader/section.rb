@@ -20,6 +20,7 @@ class NewsReader::Section
     end
 
     def articles
+        # NewsReader::Article.all.select {|article| article.section == self}
         @articles.dup.freeze
     end
 
