@@ -2,7 +2,7 @@ class NewsReader::Article
     attr_accessor :url, :title, :source, :author, :date, :mins, :body, :section, 
     :downloaded
 
-    @@downloaded = []
+    # @@downloaded = []
     # @@all = []
 
     def initialize(section, title_url_hash)
@@ -23,14 +23,14 @@ class NewsReader::Article
         @@all = sorted        
     end
 
-    def self.downloaded
-        @@downloaded
-    end
+    # def self.downloaded
+    #     @@downloaded
+    # end
     
     def fetch_content
         if !body
             NewsReader::Scraper.scrape_article(self)
-            @@downloaded << self
+            # @@downloaded << self
         end
     end
 

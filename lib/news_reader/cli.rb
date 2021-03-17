@@ -122,7 +122,7 @@ class NewsReader::CLI
         puts "4. Leave Offline Viewing Mode"
         puts "5. Exit News Reader"
 
-        input = make_selection(4)
+        input = make_selection(5)
 
         case input
         when 1
@@ -142,7 +142,7 @@ class NewsReader::CLI
     def view_articles_downloaded
         puts "\n-------------------------------------------------------------------------------"
         puts "Offline Viewing Mode - Downloaded Articles"
-        downloaded_in_order = []
+        downloaded = []
         counter = 0
 
         NewsReader::Section.all.each do |section|
@@ -154,15 +154,15 @@ class NewsReader::CLI
                     if article.downloaded == true
                         counter += 1
                         puts "#{counter}. #{article.title}"
-                        downloaded_in_order << article
+                        downloaded << article
                     end
 
                 end
             end
         end
         puts "---------------------------------\n\n"
-        offline_menu(NewsReader::Article.downloaded.length) do |input|
-            read_offline_article(downloaded_in_order[input - 1])
+        offline_menu(downloaded.length) do |input|
+            read_offline_article(downloaded[input - 1])
         end
     end
 
