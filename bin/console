@@ -11,5 +11,11 @@ require "news_reader"
 # require "pry"
 # Pry.start
 
+def reload_cli!
+    load './lib/news_reader/cli.rb'
+    
+end
+
+
 require "irb"
 IRB.start(__FILE__)
