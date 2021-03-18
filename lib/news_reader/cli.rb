@@ -108,6 +108,11 @@ class NewsReader::CLI
         input
     end
 
+
+
+
+# Offline Viewing Mode Methods
+
     def offline_viewing_mode
         puts "\n-------------------------------------------------------------------------------"
         puts "Offline Viewing Mode - Main Menu\n\n"
@@ -117,7 +122,7 @@ class NewsReader::CLI
         puts "4. Leave Offline Viewing Mode"
         puts "5. Exit News Reader"
 
-        input = make_selection(4)
+        input = make_selection(5)
 
         case input
         when 1
@@ -136,20 +141,28 @@ class NewsReader::CLI
 
     def view_articles_downloaded
         puts "\n-------------------------------------------------------------------------------"
-        puts "Offline Viewing Mode - Downloaded Articles\n"
+        puts "Offline Viewing Mode - Downloaded Articles"
+        downloaded = []
         counter = 0
+
         NewsReader::Section.all.each do |section|
-            puts "---------------------------------\n\n"
-            puts section.name
-            puts "\n"
-            section.articles.each do |article|
-                # binding.pry
-                counter += 1
-                puts "#{counter}. #{article.title}" if article.downloaded == true
+            if(section.articles.detect {|article| article.downloaded == true})
+                puts "---------------------------------\n\n"
+                puts section.name
+                puts "\n"
+                section.articles.each do |article|
+                    if article.downloaded == true
+                        counter += 1
+                        puts "#{counter}. #{article.title}"
+                        downloaded << article
+                    end
+
+                end
             end
         end
-        offline_menu(NewsReader::Article.downloaded.length) do |input|
-            read_offline_article(NewsReader::Article.downloaded[input - 1])
+        puts "---------------------------------\n\n"
+        offline_menu(downloaded.length) do |input|
+            read_offline_article(downloaded[input - 1])
         end
     end
 
